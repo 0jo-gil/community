@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>커뮤니티</title>
+</head>
+<body>
+    <header th:fragment="fragment-header" id="header">
+        <div class="inner">
+            <div class="inner-wrap">
+                <div class="l-cont">
+                    <div class="logo">
+                        <a href="/">LOGO</a>
+                    </div>
+                    <div th:text="${userChecked}"></div>
+                    <ul class="gnb">
+                        <li><a href="/member/login">로그인</a></li>
+                        <li><a href="/member/register">회원가입</a></li>
+                        <li><a href="/community/list">회원가입</a></li>
+                    </ul>
+                </div>
+                <div class="r-cont">
+                    <button>search</button>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+</body>
+</html>
