@@ -1,4 +1,4 @@
-package com.example.community;
+package com.example.community.main.controller;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,17 +13,22 @@ import java.util.Collection;
 public class MainController {
     @GetMapping("/")
     public String Main(
-            Model model
+            Model model,
+            Principal principal
     ) {
         boolean userChecked = false;
 
         try{
-
-
+            String userName = principal.getName();
+            if(!userName.isEmpty()){
+                userChecked = true;
+            } else {
+                userChecked = false;
+            }
         } catch(Exception e){
-            model.addAttribute("userChecked", userChecked);
+          userChecked = false;
         }
-
+        model.addAttribute("userChecked", userChecked);
 
         return "/index";
     }

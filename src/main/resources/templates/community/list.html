@@ -11,8 +11,24 @@
 </head>
 <body>
     <div id="wrap">
+        <h1>커뮤니티 - 리스트</h1>
 
+        <div th:text="${postingList}"></div>
 
+        <table>
+            <thead>
+                <tr>
+                    <th>제목</th>
+                    <th>아이디</th>
+                    <th>작성일</th>
+                </tr>
+            </thead>
+            <tr th:each="item : ${postingList}">
+                <td th:text="${item.title}"></td>
+                <td th:text="${item.userId}"></td>
+                <td th:text="${item.createdAt}"></td>
+            </tr>
+        </table>
     </div>
 
 </body>

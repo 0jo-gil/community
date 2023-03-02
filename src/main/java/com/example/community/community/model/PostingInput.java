@@ -8,5 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 public class PostingInput {
+    String title;
+    String content;
 
 }

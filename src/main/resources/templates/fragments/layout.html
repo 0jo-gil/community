@@ -9,17 +9,20 @@
 </head>
 <body>
     <header th:fragment="fragment-header" id="header">
+        <div th:text="${userChecked}"></div>
         <div class="inner">
             <div class="inner-wrap">
                 <div class="l-cont">
                     <div class="logo">
                         <a href="/">LOGO</a>
                     </div>
-                    <div th:text="${userChecked}"></div>
                     <ul class="gnb">
-                        <li><a href="/member/login">로그인</a></li>
+                        <li>
+                            <a th:if="${userChecked eq false}" href="/member/login">로그인</a>
+                            <a th:if="${userChecked eq true}" href="/member/logout">로그아웃</a>
+                        </li>
                         <li><a href="/member/register">회원가입</a></li>
-                        <li><a href="/community/list">회원가입</a></li>
+                        <li><a href="/community/list">커뮤니티</a></li>
                     </ul>
                 </div>
                 <div class="r-cont">

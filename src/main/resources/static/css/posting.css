@@ -1,0 +1,6 @@
+/* 글 작성하기 페이지 */
+.posting-wrap #title{
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #aaaa;
+}
