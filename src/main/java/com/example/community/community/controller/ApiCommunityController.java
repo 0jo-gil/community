@@ -5,10 +5,9 @@ import com.example.community.community.entity.Posting;
 import com.example.community.community.model.PostingInput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.time.LocalDateTime;
 
@@ -16,13 +15,13 @@ import java.time.LocalDateTime;
 @RestController
 public class ApiCommunityController {
     private final PostingService postingService;
+
     @PostMapping("/api/community/write")
     public ResponseEntity<?> list(
             @RequestBody PostingInput parameter,
             Principal principal
             ){
         String userId = principal.getName();
-
 
         Posting posting = Posting.builder()
                 .title(parameter.getTitle())
@@ -42,9 +41,19 @@ public class ApiCommunityController {
         if(!result) {
             return ResponseEntity.badRequest().body("글쓰기 실패");
         }
-
-
         return ResponseEntity.ok().body(result);
+    }
+
+    @PutMapping("/api/community/modify")
+    public ResponseEntity<?> modify(
+            @RequestBody PostingInput parameter,
+            HttpServletRequest request
+    ) {
+        long postNum = Long.parseLong(request.getParameter("id"));
+
+
+
+        return ResponseEntity.ok().body("");
     }
 
 

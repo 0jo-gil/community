@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>커뮤니티 - 리스트</title>
+
+    <link rel="stylesheet" href="/css/layout.css">
+</head>
+<body>
+    <div id="wrap">
+        <h1>커뮤니티 - 게시글 상세</h1>
+
+<!--        <div th:text="${posting}"></div>-->
+        <div th:text="${posting.title}"></div>
+        <div th:text="${posting.createdAt}"></div>
+        <div th:utext="${posting.content}"></div>
+
+        <div class="buttons-wrap">
+            <a th:if="${checkedUserPost}" th:href="'/community/modify?id=' + ${posting.postNum}">수정</a>
+            <a href="/community/list">목록</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -12,13 +12,16 @@
     <link rel="stylesheet" href="/css/posting.css">
 </head>
 <body>
+
     <div id="wrap" class="posting-wrap">
-        <input type="text" id="title" name="title" placeholder="제목" value="" />
-        <div id="editor">
+            <input type="text" id="title" name="title" placeholder="제목" th:value="${type eq 'modify' ? posting.title : ''}" />
+            <div id="editor" th:utext="${ type eq 'modify' ? posting.content : ''}">
 
-        </div>
+            </div>
 
-        <button class="write-btn">작성하기</button>
+            <button class="write-btn">작성하기</button>
+
+
     </div>
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
