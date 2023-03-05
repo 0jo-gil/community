@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>커뮤니티</title>
+    <title>커뮤니티 - 회원가입</title>
 
     <link rel="stylesheet" href="/css/layout.css">
 </head>
@@ -15,27 +15,23 @@
             <form method="post">
                 <div>
                     <label for="userId">아이디</label>
-                    <input type="text" name="userId" id="userId" placeholder="아이디 입력"/>
+                    <input type="email" name="userId" id="userId" placeholder="아이디(이메일) 입력" required/>
                 </div>
                 <div>
                     <label for="password">비밀번호</label>
-                    <input type="password" name="password" id="password" placeholder="비밀번호 입력"/>
+                    <input type="password" name="password" id="password" placeholder="비밀번호 입력" required/>
                 </div>
                 <div>
                     <label for="rePassword">비밀번호 확인</label>
-                    <input type="rePassword" name="rePassword" id="rePassword" placeholder="비밀번호 재입력"/>
+                    <input type="password" name="rePassword" id="rePassword" placeholder="비밀번호 재입력" required/>
                 </div>
                 <div>
                     <label for="name">이름</label>
-                    <input type="text" name="name" id="name" placeholder="이름 입력"/>
-                </div>
-                <div>
-                    <label for="email">이메일</label>
-                    <input type="text" name="email" id="email" placeholder="이메일 입력"/>
+                    <input type="text" name="name" id="name" placeholder="이름 입력" required/>
                 </div>
                 <div>
                     <label for="nickname">닉네임 입력</label>
-                    <input type="nickname" name="nickname" id="nickname" placeholder="닉네임 입력"/>
+                    <input type="nickname" name="nickname" id="nickname" placeholder="닉네임 입력" required/>
                 </div>
 
                 <div class="button-wrap">

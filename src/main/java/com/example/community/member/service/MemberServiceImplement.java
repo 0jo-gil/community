@@ -1,9 +1,12 @@
 package com.example.community.member.service;
 
+import com.example.community.CommunityApplication;
 import com.example.community.member.entity.Member;
 import com.example.community.member.model.MemberInput;
 import com.example.community.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,12 +25,16 @@ import java.util.Optional;
 @Service
 public class MemberServiceImplement implements MemberService{
     private final MemberRepository memberRepository;
+    private final Logger logger = LoggerFactory.getLogger(CommunityApplication.class);
     @Override
     @Transactional
     public boolean register(MemberInput parameter) {
+        logger.info("회원가입 시작");
+
         Optional<Member> optionalMember = memberRepository.findById(parameter.getUserId());
 
         if(optionalMember.isPresent()){
+            logger.debug("회원가입 중 회원 존재");
             return false;
         }
 
@@ -36,14 +43,13 @@ public class MemberServiceImplement implements MemberService{
         Member member = Member.builder()
                 .userId(parameter.getUserId())
                 .password(hashPassword)
-                .email(parameter.getEmail())
                 .name(parameter.getName())
                 .nickname(parameter.getNickname())
                 .createdAt(LocalDateTime.now())
                 .build();
 
         memberRepository.save(member);
-
+        logger.info("회원가입 종료");
         return true;
     }
 
@@ -52,12 +58,14 @@ public class MemberServiceImplement implements MemberService{
         Optional<Member> optionalMember = memberRepository.findById(userName);
 
         if (!optionalMember.isPresent()) {
+            logger.debug("회원 정보가 존재하지 않는다.");
             throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다.");
         }
 
         Member member = optionalMember.get();
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
 
+        logger.info(member.getUserId() + " 로그인");
         return new User(member.getUserId(), member.getPassword(), grantedAuthorityList);
     }
 }

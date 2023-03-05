@@ -1,4 +1,4 @@
-package com.example.community.member.service;
+package com.example.community.member.utils;
 
 
 import org.springframework.security.authentication.BadCredentialsException;

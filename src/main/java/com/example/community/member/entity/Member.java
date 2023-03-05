@@ -3,10 +3,7 @@ package com.example.community.member.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 
@@ -15,13 +12,13 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-@Entity
+@Entity (name = "member")
 public class Member {
     @Id
     String userId;
-    String email;
     String password;
     String name;
+    @Column(unique = true)
     String nickname;
     LocalDateTime createdAt;
 }
