@@ -3,6 +3,7 @@ package com.example.community.community.controller;
 import com.example.community.community.dto.ListDto;
 import com.example.community.community.entity.Posting;
 import com.example.community.community.service.PostingService;
+import com.example.community.member.utils.AuthenticationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
@@ -18,17 +19,20 @@ import java.util.List;
 @Controller
 public class CommunityController {
     private final PostingService postingService;
-
+    private final AuthenticationUtil authenticationUtil;
 
     @GetMapping("/community/list")
     public String list(
             Model model
     ){
         List<ListDto> postingList = postingService.list();
+        boolean userChecked = authenticationUtil.isAuthenticated();
 
         if(!postingList.isEmpty()){
             model.addAttribute("postingList", postingList);
         }
+
+        model.addAttribute("userChecked", userChecked);
 
         return "/community/list";
     }
@@ -53,8 +57,6 @@ public class CommunityController {
                 checkedUserPost = true;
             }
         }
-
-
         model.addAttribute("checkedUserPost", checkedUserPost);
         model.addAttribute("posting", posting);
 
@@ -78,8 +80,6 @@ public class CommunityController {
 
         return "/community/write";
     }
-
-
 
     @GetMapping("/community/write")
     public String write(

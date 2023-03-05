@@ -1,8 +1,11 @@
 package com.example.community.configuration;
 
 
+import com.example.community.community.utils.AuthInterceptor;
+import com.example.community.member.service.LoginFailHandler;
 import com.example.community.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,6 +15,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
@@ -20,6 +25,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final MemberService memberService;
+    private final AuthenticationFailureHandler loginFailHandler;
+
 
     @Bean
     PasswordEncoder getPasswordEncoder(){
@@ -28,7 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/favicon.ico", "/files/**");
+        web.ignoring().antMatchers("/favicon.ico", "/files/**", "/css/**");
         super.configure(web);
     }
 
@@ -39,16 +46,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers(
-                        "/**"
-//                        , "/member/register"
+                        "/",
+                        "/member/login",
+                        "/member/register",
+                        "/community/list"
                 )
                 .permitAll();
 
         http.formLogin()
                 .loginPage("/member/login")
-                .successForwardUrl("/member/login")
                 .usernameParameter("userId")
                 .passwordParameter("password")
+//                .successForwardUrl("/")
+                .failureHandler(loginFailHandler)
+//                .failureUrl("/member/login")
+                .defaultSuccessUrl("/")
                 .permitAll();
 
         http.logout()
@@ -59,10 +71,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         super.configure(http);
     }
 
+
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(memberService)
                 .passwordEncoder(getPasswordEncoder());
         super.configure(auth);
     }
+
+
 }

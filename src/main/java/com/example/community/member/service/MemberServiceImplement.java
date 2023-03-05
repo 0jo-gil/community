@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class MemberServiceImplement implements MemberService{
     private final MemberRepository memberRepository;
     @Override
+    @Transactional
     public boolean register(MemberInput parameter) {
         Optional<Member> optionalMember = memberRepository.findById(parameter.getUserId());
 
@@ -40,7 +42,6 @@ public class MemberServiceImplement implements MemberService{
                 .createdAt(LocalDateTime.now())
                 .build();
 
-
         memberRepository.save(member);
 
         return true;
@@ -50,15 +51,12 @@ public class MemberServiceImplement implements MemberService{
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         Optional<Member> optionalMember = memberRepository.findById(userName);
 
-        if(!optionalMember.isPresent()){
-            return null;
+        if (!optionalMember.isPresent()) {
+            throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다.");
         }
 
         Member member = optionalMember.get();
-
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
-
-
 
         return new User(member.getUserId(), member.getPassword(), grantedAuthorityList);
     }

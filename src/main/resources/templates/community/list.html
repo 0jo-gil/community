@@ -11,9 +11,9 @@
 </head>
 <body>
     <div id="wrap">
-        <h1>커뮤니티 - 리스트</h1>
+        <div th:replace="/fragments/layout.html" :: fragment-header(${userChecked})></div>
 
-        <div th:text="${postingList}"></div>
+        <h1>커뮤니티 - 리스트</h1>
 
         <table>
             <thead>
@@ -31,6 +31,8 @@
                 <td th:text="${item.createdAt}"></td>
             </tr>
         </table>
+
+        <a href="/community/write">글쓰기</a>
     </div>
 
 </body>

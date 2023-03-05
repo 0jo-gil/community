@@ -46,10 +46,8 @@ public class ApiCommunityController {
 
     @PutMapping("/api/community/modify")
     public ResponseEntity<?> modify(
-            @RequestBody PostingInput parameter,
-            HttpServletRequest request
+            @RequestBody PostingInput parameter
     ) {
-        long postNum = Long.parseLong(request.getParameter("id"));
 
 
 

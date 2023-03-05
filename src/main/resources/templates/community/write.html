@@ -14,13 +14,18 @@
 <body>
 
     <div id="wrap" class="posting-wrap">
-            <input type="text" id="title" name="title" placeholder="제목" th:value="${type eq 'modify' ? posting.title : ''}" />
-            <div id="editor" th:utext="${ type eq 'modify' ? posting.content : ''}">
+        <input type="text" id="title" name="title" placeholder="제목" th:value="${type eq 'modify' ? posting.title : ''}" />
 
-            </div>
+        <div id="editor" th:utext="${ type eq 'modify' ? posting.content : ''}">
 
-            <button class="write-btn">작성하기</button>
+        </div>
 
+        <input type="hidden" id="quill_html" name="content" />
+
+        <div class="button-wrap">
+            <a href="/community/list">목록</a>
+            <button class="write-btn" th:data-type="${type eq 'modify' ? 'MOD' : 'REG'}">작성하기</button>
+        </div>
 
     </div>
 
@@ -31,8 +36,14 @@
         const writeBtnEl = document.querySelector('.write-btn');
 
         const API_CONFIG = {
-            METHOD: 'POST',
-            URL: '/api/community/write'
+            REG: {
+                METHOD: 'POST',
+                URL: '/api/community/write'
+            },
+            MOD: {
+                METHOD: 'PUT',
+                URL: '/api/community/modify'
+            }
         }
 
         let textParams = {
@@ -41,6 +52,14 @@
         };
 
         const quill = new Quill('#editor', {
+            modules: {
+              toolbar: [
+                  [{header: [1,2,false] }],
+                  ['bold', 'italic', 'underline'],
+                  // ['image', 'code-block'],
+                  [{ list: 'ordered' }, { list: 'bullet' }]
+              ]
+            },
             theme: 'snow'
         });
 
@@ -52,6 +71,10 @@
             }
         })
 
+        // quill.getModule('toolbar').addHandler('image', () => {
+        //
+        // })
+
         quill.on('text-change', function(delta){
             let content = quill.root.innerHTML;
             textParams = {
@@ -60,11 +83,16 @@
             }
         });
 
-        writeBtnEl.addEventListener('click', async() => {
+        writeBtnEl.addEventListener('click', async(e) => {
+            let type = e.target.getAttribute("data-type");
+            let config = API_CONFIG[type];
+
+            const {URL, METHOD} = config;
+
             const response = await fetch(
-                API_CONFIG.URL,
+                URL,
                 {
-                    method: API_CONFIG.METHOD,
+                    method: METHOD,
                     headers: {
                         'Content-Type': 'application/json'
                     },
@@ -73,7 +101,7 @@
             )
                 .then((res) => {
                     if(res.status === 200){
-                        window.location.href = '/community/list';
+                        // window.location.href = '/community/list';
                     }
                 })
                 .catch((err) => console.error(err));
