@@ -2,6 +2,7 @@ package com.example.community.member.service;
 
 import com.example.community.CommunityApplication;
 import com.example.community.member.entity.Member;
+import com.example.community.member.exception.MemberExistException;
 import com.example.community.member.model.MemberInput;
 import com.example.community.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,14 +30,13 @@ public class MemberServiceImplement implements MemberService{
     @Override
     @Transactional
     public boolean register(MemberInput parameter) {
+
         logger.info("회원가입 시작");
 
-        Optional<Member> optionalMember = memberRepository.findById(parameter.getUserId());
-
-        if(optionalMember.isPresent()){
-            logger.debug("회원가입 중 회원 존재");
-            return false;
-        }
+        Member isMember = memberRepository.findById(parameter.getUserId())
+                .orElseThrow(() -> {
+                    throw new MemberExistException("회원이 이미 존재합니다.");
+                });
 
         String hashPassword = BCrypt.hashpw(parameter.getPassword(), BCrypt.gensalt());
 

@@ -26,20 +26,15 @@ public class PostingServiceImplement implements PostingService{
 
     @Override
     public boolean modify(long postNum, Posting posting) {
-        Optional<Posting> findPosting = postingRepository.findById(postNum);
+        Posting findPosting = postingRepository.findById(postNum)
+                .orElseThrow(() -> new IllegalArgumentException("Post doesn't exist"));
 
-        if(findPosting.isPresent()){
-            findPosting.get().setTitle(posting.getTitle());
-            findPosting.get().setContent(posting.getContent());
+        findPosting.setTitle(posting.getTitle());
+        findPosting.setContent(posting.getContent());
 
-            postingRepository.save(findPosting.get());
-        }
+        postingRepository.save(findPosting);
 
-
-
-
-
-        return false;
+        return true;
     }
     @Override
     public List<ListDto> list() {
