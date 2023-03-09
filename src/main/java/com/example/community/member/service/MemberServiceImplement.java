@@ -11,13 +11,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,37 +27,27 @@ public class MemberServiceImplement implements MemberService{
     @Transactional
     public boolean register(MemberInput parameter) {
         logger.info("회원가입 시작");
+//
+//        Optional.ofNullable(
+//            memberRepository.findById(parameter.getUserId())
+//                    .orElseThrow(() -> new RuntimeException("회원 존재"))
+//            );
 
-        Optional<Member> optionalMember = memberRepository.findById(parameter.getUserId());
-
-        if(optionalMember.isPresent()){
-            logger.debug("회원가입 중 회원 존재");
-            return false;
-        }
-
-        String hashPassword = BCrypt.hashpw(parameter.getPassword(), BCrypt.gensalt());
-
-        Member member = Member.builder()
-                .userId(parameter.getUserId())
-                .password(hashPassword)
-                .name(parameter.getName())
-                .nickname(parameter.getNickname())
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        memberRepository.save(member);
+        memberRepository.save(Member.of(parameter));
         logger.info("회원가입 종료");
+
         return true;
     }
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        Optional<Member> optionalMember = memberRepository.findById(userName);
-
-        if (!optionalMember.isPresent()) {
-            logger.debug("회원 정보가 존재하지 않는다.");
-            throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다.");
-        }
+        Optional<Member> optionalMember =
+                Optional.ofNullable(
+                    memberRepository.findById(userName)
+                        .orElseThrow(() -> {
+                            logger.debug("회원 정보가 존재하지 않는다.");
+                            throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다.");
+                        }));
 
         Member member = optionalMember.get();
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();

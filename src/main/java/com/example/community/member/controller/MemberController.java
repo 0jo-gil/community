@@ -5,10 +5,15 @@ import com.example.community.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -35,15 +40,31 @@ public class MemberController {
     public String register(){
         return "/member/register";
     }
+
     @PostMapping("/member/register")
     public String registerSubmit(
-            @Validated MemberInput parameter,
+            @Valid MemberInput parameter,
+            BindingResult bindingResult,
             Model model
     ){
         boolean result = memberService.register(parameter);
 
-        if(!result) {
-            model.addAttribute("result", result);
+        HashMap<String, String> validMap = new HashMap<>();
+
+        if(bindingResult.hasErrors()){
+            List<ObjectError> errorList =
+                    bindingResult.getAllErrors();
+
+            for(ObjectError error : errorList){
+                if(error instanceof FieldError){
+                    FieldError fieldError = (FieldError) error;
+                    validMap.put(fieldError.getField(), error.getDefaultMessage());
+//                    System.out.println(fieldError.getField() + ": " + error.getDefaultMessage());
+                }
+            }
+
+            model.addAttribute("validMap", validMap);
+            return "member/register";
         }
 
         return "member/register-complete";
