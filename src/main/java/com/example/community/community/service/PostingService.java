@@ -16,4 +16,14 @@ public interface PostingService {
      * 리스트 조회
      */
     List<ListDto> list();
+
+    /**
+     * 게시글 리스트 상세 조회
+     */
+    Posting detail(long postNum);
+
+    /**
+     * 게시글 수정
+     */
+    boolean modify(long postNum, Posting posting);
 }

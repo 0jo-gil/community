@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class ListDto {
-
+    long postNum;
     String title;
     String content;
 

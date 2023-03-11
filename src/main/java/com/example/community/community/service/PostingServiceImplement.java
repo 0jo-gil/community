@@ -6,13 +6,14 @@ import com.example.community.community.repository.PostingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class PostingServiceImplement implements PostingService{
     private final PostingRepository postingRepository;
-    private final List<ListDto> listDtoList;
     @Override
     public boolean register(Posting posting) {
         try{
@@ -24,12 +25,33 @@ public class PostingServiceImplement implements PostingService{
     }
 
     @Override
+    public boolean modify(long postNum, Posting posting) {
+        Optional<Posting> findPosting = postingRepository.findById(postNum);
+
+        if(findPosting.isPresent()){
+            findPosting.get().setTitle(posting.getTitle());
+            findPosting.get().setContent(posting.getContent());
+
+            postingRepository.save(findPosting.get());
+        }
+
+
+
+
+
+        return false;
+    }
+    @Override
     public List<ListDto> list() {
         List<Posting> postingList = postingRepository.findAll();
 
+        List<ListDto> listDtoList = new ArrayList<>();
+
+
         for (Posting x : postingList){
             listDtoList.add(ListDto.builder()
-                    .title( x.getTitle())
+                    .postNum(x.getPostNum())
+                    .title(x.getTitle())
                     .userId(x.getUserId())
                     .createdAt(x.getCreatedAt())
                     .build());
@@ -37,4 +59,16 @@ public class PostingServiceImplement implements PostingService{
 
         return listDtoList;
     }
+
+    @Override
+    public Posting detail(long postNum) {
+        Optional<Posting> posting = postingRepository.findById(postNum);
+
+        if(!posting.isPresent()){
+            return null;
+        }
+
+        return posting.get();
+    }
+
 }
