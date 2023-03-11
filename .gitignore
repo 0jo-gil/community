@@ -37,5 +37,5 @@ out/
 .vscode/
 
 ## 2주차 게시판 구현 제외
-**/src/main/java/com/example/community/community/
-**/src/main/resources/templates/community/
+#**/src/main/java/com/example/community/community/
+#**/src/main/resources/templates/community/

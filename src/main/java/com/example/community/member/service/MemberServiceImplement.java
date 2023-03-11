@@ -35,6 +35,7 @@ public class MemberServiceImplement implements MemberService{
 
         Member isMember = memberRepository.findById(parameter.getUserId())
                 .orElseThrow(() -> {
+                    logger.info("회원가입 중 회원이 이미 존재합니다.");
                     throw new MemberExistException("회원이 이미 존재합니다.");
                 });
 
