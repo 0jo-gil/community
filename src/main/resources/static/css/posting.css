@@ -4,3 +4,32 @@
     border: none;
     border-bottom: 1px solid #aaaa;
 }
+
+/* 글목록 페이지 */
+.list-wrap .table-wrap {
+    width: 70%;
+    margin: 0 auto;
+}
+.list-wrap table{
+    width: 100%;
+    border-collapse: collapse;
+}
+.list-wrap th{
+    padding: 10px 0;
+    border-bottom: 2px solid #000;
+}
+
+.list-wrap tbody tr{
+    border-bottom: 1px solid #efefef;
+}
+
+.list-wrap td:not(:first-of-type){
+    text-align: center;
+    padding: 20px 10px;
+}
+
+.list-wrap td a{
+    display: block;
+    padding: 20px 30px;
+    color: #000;
+}

@@ -1,9 +1,12 @@
 package com.example.community.community.service;
 
-import com.example.community.community.dto.ListDto;
+import com.example.community.community.dto.PostDto;
 import com.example.community.community.entity.Posting;
+import com.example.community.community.model.PostingParam;
 import com.example.community.community.repository.PostingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Repository
 @Service
 public class PostingServiceImplement implements PostingService{
     private final PostingRepository postingRepository;
@@ -37,22 +41,17 @@ public class PostingServiceImplement implements PostingService{
         return true;
     }
     @Override
-    public List<ListDto> list() {
-        List<Posting> postingList = postingRepository.findAll();
+    public Page<PostDto> list(PostingParam parameter) {
+        Pageable pageable = PageRequest.of(parameter.getPageIndex() - 1, 10, Sort.by("postNum").descending());
 
-        List<ListDto> listDtoList = new ArrayList<>();
+        Page<Posting> postingList = postingRepository.findAll(pageable);
+        List<PostDto> listDtoPost = new ArrayList<>();
 
-
-        for (Posting x : postingList){
-            listDtoList.add(ListDto.builder()
-                    .postNum(x.getPostNum())
-                    .title(x.getTitle())
-                    .userId(x.getUserId())
-                    .createdAt(x.getCreatedAt())
-                    .build());
+        for (Posting posting : postingList){
+            listDtoPost.add(PostDto.of(posting));
         }
 
-        return listDtoList;
+        return new PageImpl<>(listDtoPost, pageable, postingList.getTotalElements());
     }
 
     @Override

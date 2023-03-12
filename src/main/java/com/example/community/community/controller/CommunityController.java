@@ -1,38 +1,45 @@
 package com.example.community.community.controller;
 
-import com.example.community.community.dto.ListDto;
+import com.example.community.community.dto.PostDto;
 import com.example.community.community.entity.Posting;
+import com.example.community.community.model.PostingParam;
 import com.example.community.community.service.PostingService;
 import com.example.community.member.utils.AuthenticationUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.html.Option;
 import java.security.Principal;
-import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
-public class CommunityController {
+public class CommunityController extends BaseController{
     private final PostingService postingService;
     private final AuthenticationUtil authenticationUtil;
 
     @GetMapping("/community/list")
     public String list(
-            Model model
+            Model model,
+            PostingParam parameter
     ){
-        List<ListDto> postingList = postingService.list();
+        Page<PostDto> postingList = postingService.list(parameter);
         boolean userChecked = authenticationUtil.isAuthenticated();
 
         if(!postingList.isEmpty()){
             model.addAttribute("postingList", postingList);
         }
 
+        String pagerHtml = getPagerHtml(postingList.getTotalElements(), postingList.getSize(), postingList.getNumber(), "");
+
         model.addAttribute("userChecked", userChecked);
+        model.addAttribute("pager", pagerHtml);
+        model.addAttribute("listTotalCount", postingList.getTotalElements());
 
         return "/community/list";
     }

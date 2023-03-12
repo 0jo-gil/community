@@ -1,9 +1,9 @@
 package com.example.community.community.service;
 
-import com.example.community.community.dto.ListDto;
+import com.example.community.community.dto.PostDto;
 import com.example.community.community.entity.Posting;
-
-import java.util.List;
+import com.example.community.community.model.PostingParam;
+import org.springframework.data.domain.Page;
 
 public interface PostingService {
 
@@ -15,7 +15,7 @@ public interface PostingService {
     /**
      * 리스트 조회
      */
-    List<ListDto> list();
+    Page<PostDto> list(PostingParam parameter);
 
     /**
      * 게시글 리스트 상세 조회
