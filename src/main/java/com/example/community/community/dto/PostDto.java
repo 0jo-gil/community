@@ -19,7 +19,6 @@ public class PostDto {
     String userId;
     LocalDateTime createdAt;
 
-
     public static PostDto of(Posting posting) {
         return PostDto.builder()
                 .postNum(posting.getPostNum())
