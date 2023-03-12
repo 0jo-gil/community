@@ -101,15 +101,12 @@
             )
                 .then((res) => {
                     if(res.status === 200){
-                        // window.location.href = '/community/list';
+                        console.log(res);
+                        window.location.href = res.url;
                     }
                 })
                 .catch((err) => console.error(err));
         })
-
-
-
-
 
     </script>
 </body>

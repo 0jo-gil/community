@@ -20,7 +20,7 @@ public interface PostingService {
     /**
      * 게시글 리스트 상세 조회
      */
-    Posting detail(long postNum);
+    PostDto detail(long postNum);
 
     /**
      * 게시글 수정

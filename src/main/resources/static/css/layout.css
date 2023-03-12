@@ -22,6 +22,11 @@ body{
     margin: 0 auto;
 }
 
+.contents-wrap {
+    width: 70%;
+    margin: 0 auto;
+}
+
 .inner-wrap{
     display: flex;
     justify-content: space-between;

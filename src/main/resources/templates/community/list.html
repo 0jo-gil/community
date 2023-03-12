@@ -14,7 +14,7 @@
     <div id="wrap" class="list-wrap">
         <div th:replace="/fragments/layout.html" :: fragment-header(${userChecked})></div>
 
-        <div class="table-wrap">
+        <div class="contents-wrap">
             <h1 class="title">커뮤니티 - 리스트</h1>
 
             <div>
@@ -29,13 +29,19 @@
                         <th width="20%">작성일</th>
                     </tr>
                 </thead>
-                <tr th:each="item : ${postingList}">
-                    <td>
-                        <a th:href="'/community/detail?id=' + ${item.postNum}" th:text="${item.title}"></a>
-                    </td>
-                    <td th:text="${item.userId}"></td>
-                    <td th:text="${item.createdDateText}"></td>
-                </tr>
+                <tbody>
+                    <tr th:if="${postingList.size() < 1 || postingList == null}" class="row-empty">
+                        <td colspan="3">리스트가 존재하지 않습니다.</td>
+                    </tr>
+                    <tr th:each="item : ${postingList}">
+                        <td>
+                            <a th:href="'/community/detail?id=' + ${item.postNum}" th:text="${item.title}"></a>
+                        </td>
+                        <td th:text="${item.userId}"></td>
+                        <td th:text="${item.createdDateText}"></td>
+                    </tr>
+                </tbody>
+
             </table>
 
             <a href="/community/write">글쓰기</a>

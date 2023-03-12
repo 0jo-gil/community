@@ -2,6 +2,7 @@ package com.example.community.community.service;
 
 import com.example.community.community.dto.PostDto;
 import com.example.community.community.entity.Posting;
+import com.example.community.community.exception.PostingExistException;
 import com.example.community.community.model.PostingParam;
 import com.example.community.community.repository.PostingRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class PostingServiceImplement implements PostingService{
     @Override
     public boolean modify(long postNum, Posting posting) {
         Posting findPosting = postingRepository.findById(postNum)
-                .orElseThrow(() -> new IllegalArgumentException("Post doesn't exist"));
+                .orElseThrow(() -> new PostingExistException("게시글이 존재하지 않습니다."));
 
         findPosting.setTitle(posting.getTitle());
         findPosting.setContent(posting.getContent());
@@ -42,7 +43,10 @@ public class PostingServiceImplement implements PostingService{
     }
     @Override
     public Page<PostDto> list(PostingParam parameter) {
-        Pageable pageable = PageRequest.of(parameter.getPageIndex() - 1, 10, Sort.by("postNum").descending());
+        Pageable pageable = PageRequest.of(
+                parameter.getPageIndex() - 1,
+                10,
+                Sort.by("postNum").descending());
 
         Page<Posting> postingList = postingRepository.findAll(pageable);
         List<PostDto> listDtoPost = new ArrayList<>();
@@ -55,14 +59,14 @@ public class PostingServiceImplement implements PostingService{
     }
 
     @Override
-    public Posting detail(long postNum) {
-        Optional<Posting> posting = postingRepository.findById(postNum);
+    public PostDto detail(long postNum) {
+        Optional<Posting> posting = Optional
+                .ofNullable(postingRepository
+                    .findById(postNum)
+                    .orElseThrow(() -> new PostingExistException("해당 게시글이 존재하지 않습니다."))
+                );
 
-        if(!posting.isPresent()){
-            return null;
-        }
-
-        return posting.get();
+        return PostDto.of(posting.get());
     }
 
 }

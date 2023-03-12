@@ -24,6 +24,7 @@ public class PostDto {
         return PostDto.builder()
                 .postNum(posting.getPostNum())
                 .title(posting.getTitle())
+                .content(posting.getContent())
                 .userId(posting.getUserId())
                 .createdAt(posting.getCreatedAt())
                 .build();
