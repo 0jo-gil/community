@@ -26,13 +26,15 @@ public class MemberServiceImplement implements MemberService{
 
         boolean exists = memberRepository.existsByUsername(parameter.getUsername());
 
-//        if(exists){
+        if(exists){
 //            throw new AlreadyBoundException();
-//        }
+            throw new RuntimeException("아이디가 존재합니다.");
+        }
 
         parameter.setPassword(passwordEncoder.encode(parameter.getPassword()));
 
         Member result = memberRepository.save(MemberInput.SignUp.of(parameter));
+
         logger.info("회원가입 종료");
         return result;
     }
@@ -51,19 +53,7 @@ public class MemberServiceImplement implements MemberService{
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return  memberRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("couldn't find user -> " + username));
-//        Optional<Member> optionalMember =
-//                Optional.ofNullable(
-//                    memberRepository.findById(username)
-//                        .orElseThrow(() -> {
-//                            logger.debug("회원 정보가 존재하지 않는다.");
-//                            throw new UsernameNotFoundException("회원 정보가 존재하지 않습니다.");
-//                        }));
-//
-//        Member member = optionalMember.get();
-//        List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
-//
-//        logger.info(member.getUsername() + " 로그인");
-//        return new User(member.getUsername(), member.getPassword(), grantedAuthorityList);
+                    .orElseThrow(() ->
+                            new UsernameNotFoundException("couldn't find user -> " + username));
     }
 }

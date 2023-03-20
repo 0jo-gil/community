@@ -2,17 +2,18 @@ package com.example.community.member.model;
 
 
 import com.example.community.member.entity.Member;
+import com.example.community.member.entity.MemberRoleCode;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class MemberInput {
-
     @Data
     public static class SignIn{
         @NotEmpty(message = "이메일 입력은 필수 입니다.")
@@ -41,6 +42,7 @@ public class MemberInput {
         private List<String> roles;
 
         public static Member of(MemberInput.SignUp member) {
+
             return Member.builder()
                     .username(member.getUsername())
                     .password(member.getPassword())

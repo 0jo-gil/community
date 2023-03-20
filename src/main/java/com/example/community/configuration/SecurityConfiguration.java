@@ -44,7 +44,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .permitAll()
                 .and()
                         .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
     }
 
     @Override
