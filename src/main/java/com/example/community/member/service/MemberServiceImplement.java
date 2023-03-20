@@ -52,7 +52,7 @@ public class MemberServiceImplement implements MemberService{
         Member member = optionalMember.get();
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
 
-        logger.info(member.getUserId() + " 로그인");
-        return new User(member.getUserId(), member.getPassword(), grantedAuthorityList);
+        logger.info(member.getUsername() + " 로그인");
+        return new User(member.getUsername(), member.getPassword(), grantedAuthorityList);
     }
 }

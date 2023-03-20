@@ -14,6 +14,7 @@ import javax.validation.constraints.Size;
 @Setter
 
 public class MemberInput {
+
     @NotEmpty(message = "이메일 입력은 필수 입니다.")
     @Email(message = "이메일 형식에 맞지 않습니다.")
     private String userId;
