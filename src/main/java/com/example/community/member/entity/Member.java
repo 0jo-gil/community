@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -60,15 +61,5 @@ public class Member implements UserDetails {
         return false;
     }
 
-    public static Member of(MemberInput member) {
-        String hashPassword = BCrypt.hashpw(member.getPassword(), BCrypt.gensalt());
 
-        return Member.builder()
-                .username(member.getUserId())
-                .password(hashPassword)
-                .name(member.getName())
-                .nickname(member.getNickname())
-                .createdAt(LocalDateTime.now())
-                .build();
-    }
 }
