@@ -15,4 +15,9 @@ public class MemberController {
         System.out.println("login");
         return "member/login";
     }
+
+    @GetMapping("/member/register-complete")
+    public String registerComplete(){
+        return "member/register-complete";
+    }
 }

@@ -9,6 +9,7 @@ import com.example.community.member.utils.AuthenticationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,7 @@ public class CommunityController extends BaseController{
     private final AuthenticationUtil authenticationUtil;
 
     @GetMapping("/community/list")
+    @PreAuthorize("hasRole('USER')")
     public String list(
             Model model,
             PostingParam parameter
