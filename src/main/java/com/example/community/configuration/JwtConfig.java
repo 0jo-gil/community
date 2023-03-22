@@ -19,7 +19,9 @@ public class JwtConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginCheck).addPathPatterns("", "/**")
+        registry
+                .addInterceptor(loginCheck)
+                .addPathPatterns("", "/**")
                 .excludePathPatterns(
                         "/",
                         "/**/login",
