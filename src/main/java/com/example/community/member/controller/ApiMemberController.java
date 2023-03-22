@@ -4,7 +4,9 @@ import com.example.community.member.entity.Member;
 import com.example.community.member.model.MemberInput;
 import com.example.community.member.service.MemberService;
 import com.example.community.member.utils.TokenProvider;
+import com.example.community.utils.CookieUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ import java.net.URI;
 public class ApiMemberController {
     private final MemberService memberService;
     private final TokenProvider tokenProvider;
+//    @Autowired
+    private final CookieUtil cookieUtil;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(
@@ -43,14 +47,10 @@ public class ApiMemberController {
             HttpServletResponse response
     ){
         Member member = memberService.authenticate(request);
-        String token = tokenProvider.generateToken(member.getUsername(), member.getRoles());
-//        System.out.println(token);
-
-        response.setHeader("X-AUTH-TOKEN", token);
-        Cookie cookie = new Cookie("X-AUTH-TOKEN", token);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
+        String token = tokenProvider.generateToken(
+                member.getUsername(), member.getRoles());
+        Cookie cookie = cookieUtil.createCookie("X-AUTH-TOKEN"
+                , token);
 
         response.addCookie(cookie);
 

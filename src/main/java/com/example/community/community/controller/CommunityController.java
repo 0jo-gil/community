@@ -6,6 +6,7 @@ import com.example.community.community.model.PostingInput;
 import com.example.community.community.model.PostingParam;
 import com.example.community.community.service.PostingService;
 import com.example.community.member.utils.AuthenticationUtil;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PageableDefault;
@@ -30,6 +31,7 @@ public class CommunityController extends BaseController{
     private final AuthenticationUtil authenticationUtil;
 
     @GetMapping("/community/list")
+    @PreAuthorize("hasAnyRole('USER')")
     public String list(
             Model model,
             PostingParam parameter

@@ -13,16 +13,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 public class TokenProvider {
-    private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60;
+    public static final String COOKIE_NAME = "X-AUTH-TOKEN";
+    public static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60;
     private static final String KEY_ROLES = "roles";
 
     private final MemberService memberService;
@@ -59,6 +62,10 @@ public class TokenProvider {
         return parseClaims(token).getSubject();
     }
 
+    public String resolveToken(HttpServletRequest request){
+        return request.getHeader("X_AUTH_TOKEN");
+    }
+
     public boolean validateToken(String token){
         if(!StringUtils.hasText(token)) return false;
 
@@ -67,12 +74,20 @@ public class TokenProvider {
     }
 
 
-//private
-     public Claims parseClaims(String token){
+     private Claims parseClaims(String token){
         try{
             return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         } catch(ExpiredJwtException e){
             return e.getClaims();
         }
+    }
+
+    public Map<String, Object> verifyToken(String token){
+        Claims claims = Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return new HashMap<>(claims);
     }
 }

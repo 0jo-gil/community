@@ -23,7 +23,7 @@ public class MemberInput {
         @Size(min = 5, message = "비밀번호는 최소 5자 이상이어야 합니다.")
         private String password;
 
-        private List<String> roles;
+//        private List<String> roles;
     }
 
     @Data

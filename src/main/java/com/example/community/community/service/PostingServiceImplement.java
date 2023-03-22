@@ -7,6 +7,7 @@ import com.example.community.community.model.PostingParam;
 import com.example.community.community.repository.PostingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
