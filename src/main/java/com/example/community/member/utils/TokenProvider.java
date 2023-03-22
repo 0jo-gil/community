@@ -13,9 +13,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import javax.xml.bind.DatatypeConverter;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -64,7 +66,9 @@ public class TokenProvider {
         return !claims.getExpiration().before(new Date());
     }
 
-    private Claims parseClaims(String token){
+
+//private
+     public Claims parseClaims(String token){
         try{
             return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         } catch(ExpiredJwtException e){

@@ -42,6 +42,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                                 "/community/list"
                         )
                         .permitAll()
+                        .anyRequest().hasRole("USER")
                 .and()
                         .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }

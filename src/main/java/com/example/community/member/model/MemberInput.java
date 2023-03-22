@@ -22,6 +22,8 @@ public class MemberInput {
         @NotEmpty(message = "비밀번호 입력은 필수입니다.")
         @Size(min = 5, message = "비밀번호는 최소 5자 이상이어야 합니다.")
         private String password;
+
+        private List<String> roles;
     }
 
     @Data

@@ -30,7 +30,6 @@ public class CommunityController extends BaseController{
     private final AuthenticationUtil authenticationUtil;
 
     @GetMapping("/community/list")
-    @PreAuthorize("hasRole('USER')")
     public String list(
             Model model,
             PostingParam parameter

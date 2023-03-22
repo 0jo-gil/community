@@ -1,6 +1,7 @@
 package com.example.community.member.utils;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -23,12 +26,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final TokenProvider tokenProvider;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    ) throws ServletException, IOException {
         String token = resolveTokenFromRequest(request);
+
 
         if(StringUtils.hasText(token) && tokenProvider.validateToken(token)){
             Authentication authentication = tokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
         }
 
         filterChain.doFilter(request, response);
@@ -36,6 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String resolveTokenFromRequest (HttpServletRequest request){
         String token = request.getHeader(TOKEN_HEADER);
+        log.info(token);
 
         if(!ObjectUtils.isEmpty(token) && token.startsWith(TOKEN_PREFIX)){
             return token.substring(TOKEN_PREFIX.length());

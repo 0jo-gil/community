@@ -44,7 +44,7 @@ public class ApiMemberController {
     ){
         Member member = memberService.authenticate(request);
         String token = tokenProvider.generateToken(member.getUsername(), member.getRoles());
-        System.out.println(token);
+//        System.out.println(token);
 
         response.setHeader("X-AUTH-TOKEN", token);
         Cookie cookie = new Cookie("X-AUTH-TOKEN", token);
