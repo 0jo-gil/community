@@ -33,7 +33,7 @@ public class PostingServiceImplement implements PostingService{
     @Override
     public boolean modify(long postNum, Posting posting) {
         Posting findPosting = postingRepository.findById(postNum)
-                .orElseThrow(() -> new PostingExistException("게시글이 존재하지 않습니다."));
+                .orElseThrow(() -> new PostingExistException());
 
         findPosting.setTitle(posting.getTitle());
         findPosting.setContent(posting.getContent());
@@ -61,13 +61,12 @@ public class PostingServiceImplement implements PostingService{
 
     @Override
     public PostDto detail(long postNum) {
-        Optional<Posting> posting = Optional
-                .ofNullable(postingRepository
+        Posting posting = postingRepository
                     .findById(postNum)
-                    .orElseThrow(() -> new PostingExistException("해당 게시글이 존재하지 않습니다."))
+                    .orElseThrow(() -> new PostingExistException()
                 );
 
-        return PostDto.of(posting.get());
+        return PostDto.of(posting);
     }
 
 }

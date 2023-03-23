@@ -7,8 +7,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-public class PostingInput {
+public class PostingDto {
     String title;
     String content;
-
 }

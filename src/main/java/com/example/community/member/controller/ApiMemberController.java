@@ -1,12 +1,11 @@
 package com.example.community.member.controller;
 
 import com.example.community.member.entity.Member;
-import com.example.community.member.model.MemberInput;
+import com.example.community.member.model.MemberDto;
 import com.example.community.member.service.MemberService;
 import com.example.community.member.utils.TokenProvider;
 import com.example.community.utils.CookieUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,7 @@ public class ApiMemberController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(
-            @RequestBody MemberInput.SignUp request
+            @RequestBody MemberDto.SignUp request
     ){
         Member result = memberService.register(request);
 
@@ -43,7 +42,7 @@ public class ApiMemberController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(
-            @RequestBody MemberInput.SignIn request,
+            @RequestBody MemberDto.SignIn request,
             HttpServletResponse response
     ){
         Member member = memberService.authenticate(request);

@@ -1,16 +1,15 @@
 package com.example.community.community.controller;
 
-import com.example.community.community.model.ServiceResult;
 import com.example.community.community.service.PostingService;
 import com.example.community.community.entity.Posting;
-import com.example.community.community.model.PostingInput;
+import com.example.community.community.model.PostingDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -20,10 +19,11 @@ import java.time.LocalDateTime;
 public class ApiCommunityController extends BaseController {
     private final PostingService postingService;
     @PostMapping("/api/community/write")
+    @PreAuthorize("hasAnyRole('USER')")
     public ResponseEntity writeSubmit(
-            @RequestBody PostingInput parameter,
+            @RequestBody PostingDto parameter,
             Principal principal
-            ){
+    ){
         HttpHeaders headers = new HttpHeaders();
 
         String userId = principal.getName();
@@ -53,7 +53,7 @@ public class ApiCommunityController extends BaseController {
 
     @PutMapping("/api/community/modify")
     public ResponseEntity<?> modify(
-            @RequestBody PostingInput parameter
+            @RequestBody PostingDto parameter
     ) {
         return ResponseEntity.ok().body("");
     }

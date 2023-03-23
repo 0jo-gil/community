@@ -3,12 +3,14 @@ package com.example.community.member.service;
 import com.example.community.CommunityApplication;
 import com.example.community.member.entity.Member;
 import com.example.community.member.entity.MemberRoleCode;
-import com.example.community.member.model.MemberInput;
+import com.example.community.member.exception.MemberExistException;
+import com.example.community.member.exception.MemberNotExistException;
+import com.example.community.member.exception.NotCorrectPassword;
+import com.example.community.member.model.MemberDto;
 import com.example.community.member.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,15 +28,13 @@ public class MemberServiceImplement implements MemberService{
 
     @Override
 //    @Transactional
-    public Member register(MemberInput.SignUp parameter) {
+    public Member register(MemberDto.SignUp parameter) {
         logger.info("회원가입 시작");
 
         boolean exists = memberRepository.existsByUsername(parameter.getUsername());
 
-
         if(exists){
-//            throw new AlreadyBoundException();
-            throw new RuntimeException("아이디가 존재합니다.");
+            throw new MemberExistException();
         }
 
         List<String> role = new ArrayList<>();
@@ -43,19 +43,19 @@ public class MemberServiceImplement implements MemberService{
         parameter.setPassword(passwordEncoder.encode(parameter.getPassword()));
         parameter.setRoles(role);
 
-        Member result = memberRepository.save(MemberInput.SignUp.of(parameter));
+        Member result = memberRepository.save(MemberDto.SignUp.of(parameter));
 
         logger.info("회원가입 종료");
         return result;
     }
 
     @Override
-    public Member authenticate(MemberInput.SignIn member) {
+    public Member authenticate(MemberDto.SignIn member) {
         Member user = memberRepository.findByUsername(member.getUsername())
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 ID입니다."));
+                .orElseThrow(() -> new MemberNotExistException());
 
         if(!passwordEncoder.matches(member.getPassword(), user.getPassword())){
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+            throw new NotCorrectPassword();
         }
 
         return user;

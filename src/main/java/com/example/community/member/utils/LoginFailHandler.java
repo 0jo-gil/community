@@ -18,8 +18,8 @@ import java.net.URLEncoder;
 public class LoginFailHandler extends SimpleUrlAuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-
         String errorMsg;
+
         if(exception instanceof BadCredentialsException){
             errorMsg = "아이디 또는 비밀번호가 틀립니다.";
         } else {

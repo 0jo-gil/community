@@ -2,18 +2,15 @@ package com.example.community.member.model;
 
 
 import com.example.community.member.entity.Member;
-import com.example.community.member.entity.MemberRoleCode;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public class MemberInput {
+public class MemberDto {
     @Data
     public static class SignIn{
         @NotEmpty(message = "이메일 입력은 필수 입니다.")
@@ -22,8 +19,6 @@ public class MemberInput {
         @NotEmpty(message = "비밀번호 입력은 필수입니다.")
         @Size(min = 5, message = "비밀번호는 최소 5자 이상이어야 합니다.")
         private String password;
-
-//        private List<String> roles;
     }
 
     @Data
@@ -43,7 +38,7 @@ public class MemberInput {
 
         private List<String> roles;
 
-        public static Member of(MemberInput.SignUp member) {
+        public static Member of(MemberDto.SignUp member) {
 
             return Member.builder()
                     .username(member.getUsername())

@@ -73,21 +73,11 @@ public class TokenProvider {
         return !claims.getExpiration().before(new Date());
     }
 
-
      private Claims parseClaims(String token){
         try{
             return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         } catch(ExpiredJwtException e){
             return e.getClaims();
         }
-    }
-
-    public Map<String, Object> verifyToken(String token){
-        Claims claims = Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token)
-                .getBody();
-
-        return new HashMap<>(claims);
     }
 }

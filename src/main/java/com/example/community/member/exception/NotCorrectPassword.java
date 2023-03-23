@@ -1,9 +1,10 @@
-package com.example.community.community.exception;
+package com.example.community.member.exception;
 
 import com.example.community.exception.AbstractException;
 import org.springframework.http.HttpStatus;
 
-public class PostingExistException extends AbstractException {
+public class NotCorrectPassword extends AbstractException {
+
     @Override
     public int getStatusCode() {
         return HttpStatus.BAD_REQUEST.value();
@@ -11,6 +12,6 @@ public class PostingExistException extends AbstractException {
 
     @Override
     public String getMessage() {
-        return "게시글이 존재하지 않습니다.";
+        return "비밀번호가 일치하지 않습니다.";
     }
 }

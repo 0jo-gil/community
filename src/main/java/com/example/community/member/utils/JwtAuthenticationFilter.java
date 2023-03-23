@@ -37,7 +37,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 //        String token = resolveTokenFromRequest(request, response);
         Cookie tokenCookie = cookieUtil.getCookie(request, "X-AUTH-TOKEN");
+
         log.info("tokenCookie ->>>>" + tokenCookie);
+
         if(tokenCookie != null){
             String token = tokenCookie.getValue();
             log.info("tokennnnnn -> " + token);
