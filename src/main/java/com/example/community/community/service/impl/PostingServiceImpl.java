@@ -1,24 +1,23 @@
-package com.example.community.community.service;
+package com.example.community.community.service.impl;
 
 import com.example.community.community.dto.PostDto;
 import com.example.community.community.entity.Posting;
 import com.example.community.community.exception.PostingExistException;
 import com.example.community.community.model.PostingParam;
 import com.example.community.community.repository.PostingRepository;
+import com.example.community.community.service.PostingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
 @Service
-public class PostingServiceImplement implements PostingService{
+public class PostingServiceImpl implements PostingService {
     private final PostingRepository postingRepository;
     @Override
     public boolean register(Posting posting) {

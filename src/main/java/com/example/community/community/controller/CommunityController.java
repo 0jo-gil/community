@@ -33,8 +33,8 @@ public class CommunityController extends BaseController{
         boolean userChecked = authenticationUtil.isAuthenticated();
 
         String pagerHtml = getPagerHtml(postPage.getTotalElements(), postPage.getSize(), postPage.getNumber(), "");
-        model.addAttribute("postingList", postingList);
 
+        model.addAttribute("postingList", postingList);
         model.addAttribute("userChecked", userChecked);
         model.addAttribute("pager", pagerHtml);
         model.addAttribute("listTotalCount", postPage.getTotalElements());
@@ -49,6 +49,7 @@ public class CommunityController extends BaseController{
             Principal principal
     ) {
         long postNum = Long.parseLong(request.getParameter("id"));
+
         PostDto posting = postingService.detail(postNum);
         boolean checkedUserPost = false;
 
@@ -59,6 +60,7 @@ public class CommunityController extends BaseController{
                 checkedUserPost = true;
             }
         }
+
         model.addAttribute("checkedUserPost", checkedUserPost);
         model.addAttribute("posting", posting);
         model.addAttribute("userChecked", userChecked);

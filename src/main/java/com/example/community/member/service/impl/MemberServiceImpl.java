@@ -1,4 +1,4 @@
-package com.example.community.member.service;
+package com.example.community.member.service.impl;
 
 import com.example.community.CommunityApplication;
 import com.example.community.member.entity.Member;
@@ -8,6 +8,7 @@ import com.example.community.member.exception.MemberNotExistException;
 import com.example.community.member.exception.NotCorrectPassword;
 import com.example.community.member.model.MemberDto;
 import com.example.community.member.repository.MemberRepository;
+import com.example.community.member.service.MemberService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class MemberServiceImplement implements MemberService{
+public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
     private final Logger logger = LoggerFactory.getLogger(CommunityApplication.class);
