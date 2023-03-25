@@ -15,5 +15,47 @@
 
     </div>
 
+    <script>
+
+
+        window.onload = () => {
+            const logoutBtn = document.querySelector(".logout-btn");
+
+            const API_CONFIG = {
+                LOGOUT: {
+                    METHOD: 'POST',
+                    URL: '/api/member/logout'
+                }
+            }
+
+            logoutBtn.addEventListener('click', logoutHandler);
+
+            async function logoutHandler(e){
+                e.preventDefault();
+                const { METHOD, URL } = API_CONFIG.LOGOUT;
+                const response = await fetch(
+                    URL,
+                    {
+                        method: METHOD,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                    }
+                )
+                    .then((res) => {
+                        if(res.status === 200){
+                            console.log(res);
+                            window.location.href = '/';
+                        }
+                    })
+                    .catch((err) => console.error(err));
+
+            }
+
+        }
+
+
+    </script>
+
 </body>
 </html>

@@ -19,7 +19,7 @@
                     <ul class="gnb">
                         <li>
                             <a th:if="${userChecked eq false}" href="/member/login">로그인</a>
-                            <a th:if="${userChecked eq true}" href="/member/logout">로그아웃</a>
+                            <a th:if="${userChecked eq true}" href="#" class="logout-btn">로그아웃</a>
                         </li>
                         <li><a href="/member/register">회원가입</a></li>
                         <li><a href="/community/list?pageIndex=1">커뮤니티</a></li>

@@ -1,8 +1,29 @@
 /* 글 작성하기 페이지 */
+.posting-wrap{
+    padding-top: 30px;
+}
 .posting-wrap #title{
     width: 100%;
     border: none;
     border-bottom: 1px solid #aaaa;
+    font-size: 18px;
+    padding: 10px 5px;
+    margin-bottom: 20px;
+}
+.posting-wrap #editor{
+    height: 600px;
+    font-size: 16px;
+}
+.posting-wrap .button-wrap{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.posting-wrap .button-wrap a,
+.posting-wrap .write-btn{
+    color: #111;
+    font-size: 14px;
 }
 
 /* 글목록 페이지 */
@@ -36,6 +57,12 @@
     display: block;
     padding: 20px 20px;
     color: #000;
+}
+
+.list-wrap .write-btn{
+    margin-top: 20px;
+    color: #111;
+    display: inline-block;
 }
 
 

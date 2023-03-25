@@ -9,14 +9,19 @@ import com.example.community.member.exception.NotCorrectPassword;
 import com.example.community.member.model.MemberDto;
 import com.example.community.member.repository.MemberRepository;
 import com.example.community.member.service.MemberService;
+import com.example.community.member.utils.TokenProvider;
+import com.example.community.utils.CookieUtil;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +30,16 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
+
+    private final CookieUtil cookieUtil;
+
+
     private final Logger logger = LoggerFactory.getLogger(CommunityApplication.class);
 
+    private final String COOKIE_NAME = "X-AUTH-TOKEN";
+
+
     @Override
-//    @Transactional
     public Member register(MemberDto.SignUp parameter) {
         logger.info("회원가입 시작");
 
@@ -58,8 +69,12 @@ public class MemberServiceImpl implements MemberService {
         if(!passwordEncoder.matches(member.getPassword(), user.getPassword())){
             throw new NotCorrectPassword();
         }
-
         return user;
+    }
+
+    @Override
+    public boolean logout() {
+        return true;
     }
 
     @Override
@@ -69,4 +84,6 @@ public class MemberServiceImpl implements MemberService {
                         new UsernameNotFoundException("couldn't find user -> " + username));
         return member;
     }
+
+
 }

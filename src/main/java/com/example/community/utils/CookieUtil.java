@@ -1,5 +1,6 @@
 package com.example.community.utils;
 
+import com.example.community.member.exception.CookieNotExistException;
 import com.example.community.member.utils.TokenProvider;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -38,10 +39,11 @@ public class CookieUtil {
             }
 
         } catch(RuntimeException e){
-            throw new RuntimeException("쿠키 에러");
+            throw new CookieNotExistException();
         }
 
 
         return null;
     }
+
 }

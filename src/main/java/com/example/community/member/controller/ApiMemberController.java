@@ -7,6 +7,7 @@ import com.example.community.member.utils.TokenProvider;
 import com.example.community.utils.CookieUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,22 +22,20 @@ import java.net.URI;
 public class ApiMemberController {
     private final MemberService memberService;
     private final TokenProvider tokenProvider;
-//    @Autowired
     private final CookieUtil cookieUtil;
+
 
     @PostMapping("/register")
     public ResponseEntity<?> register(
             @RequestBody MemberDto.SignUp request
     ){
         Member result = memberService.register(request);
-
         HttpHeaders headers = new HttpHeaders();
 
         headers.setLocation(
                 URI.create("/member/register-complete")
         );
 
-//        return ResponseEntity.ok(result);
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
@@ -48,11 +47,24 @@ public class ApiMemberController {
         Member member = memberService.authenticate(request);
         String token = tokenProvider.generateToken(
                 member.getUsername(), member.getRoles());
+
         Cookie cookie = cookieUtil.createCookie("X-AUTH-TOKEN"
                 , token);
 
         response.addCookie(cookie);
 
         return ResponseEntity.ok(token);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(
+            HttpServletResponse response
+    ){
+        boolean logoutResult = memberService.logout();
+
+        Cookie cookie = cookieUtil.createCookie("X-AUTH-TOKEN", null);
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok(logoutResult);
     }
 }

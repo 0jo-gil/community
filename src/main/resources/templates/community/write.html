@@ -14,19 +14,20 @@
 <body>
 
     <div id="wrap" class="posting-wrap">
-        <input type="text" id="title" name="title" placeholder="제목" th:value="${type eq 'modify' ? posting.title : ''}" />
+        <div class="contents-wrap">
+            <input type="text" id="title" name="title" placeholder="제목" th:value="${type eq 'modify' ? posting.title : ''}" />
 
-        <div id="editor" th:utext="${ type eq 'modify' ? posting.content : ''}">
+            <div id="editor" th:utext="${ type eq 'modify' ? posting.content : ''}">
 
+            </div>
+
+            <input type="hidden" id="quill_html" name="content" />
+
+            <div class="button-wrap">
+                <a href="/community/list?pageIndex=1">목록</a>
+                <button class="write-btn" th:data-type="${type eq 'modify' ? 'MOD' : 'REG'}">작성하기</button>
+            </div>
         </div>
-
-        <input type="hidden" id="quill_html" name="content" />
-
-        <div class="button-wrap">
-            <a href="/community/list">목록</a>
-            <button class="write-btn" th:data-type="${type eq 'modify' ? 'MOD' : 'REG'}">작성하기</button>
-        </div>
-
     </div>
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>

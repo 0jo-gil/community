@@ -20,7 +20,9 @@
             <div class="content">
                 <div class="content-header">
                     <div th:text="${posting.title}" class="content-title"></div>
-                    <div th:text="${posting.createdDateText}"></div>
+                    <div>
+                        <span th:text="${posting.userId}"></span> / <span th:text="${posting.createdDateText}"></span>
+                    </div>
                 </div>
                 <div class="content-body">
                     <div th:utext="${posting.content}"></div>
@@ -28,7 +30,7 @@
             </div>
 
             <div class="buttons-wrap">
-<!--                <a th:if="${checkedUserPost}" th:href="'/community/modify?id=' + ${posting.postNum}">수정</a>-->
+                <a th:if="${checkedUserPost}" th:href="'/community/modify?id=' + ${posting.postNum}">수정</a>
                 <a href="/community/list?pageIndex=1">목록</a>
             </div>
         </div>
