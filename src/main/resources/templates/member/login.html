@@ -65,8 +65,10 @@
         )
             .then((res) => {
                 if(res.status === 200){
-                    window.location.href = "/";
-                    console.log(res);
+                    // window.location.href = "/";
+                    console.log(res.headers.get("Authorization"));
+
+
                 }
             })
             .catch((err) => console.error(err));

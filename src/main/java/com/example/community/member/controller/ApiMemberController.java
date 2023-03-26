@@ -53,7 +53,9 @@ public class ApiMemberController {
 
         response.addCookie(cookie);
 
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .build();
     }
 
     @PostMapping("/logout")
