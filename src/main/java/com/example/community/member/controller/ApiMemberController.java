@@ -3,12 +3,13 @@ package com.example.community.member.controller;
 import com.example.community.member.entity.Member;
 import com.example.community.member.model.MemberDto;
 import com.example.community.member.service.MemberService;
-import com.example.community.member.utils.TokenProvider;
+import com.example.community.member.utils.JwtTokenProvider;
 import com.example.community.utils.CookieUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,13 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
+import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/member")
 public class ApiMemberController {
     private final MemberService memberService;
-    private final TokenProvider tokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
     private final CookieUtil cookieUtil;
 
 
@@ -46,18 +48,25 @@ public class ApiMemberController {
             @RequestBody MemberDto.SignIn request,
             HttpServletResponse response
     ){
+        System.out.println("로그인");
+
         Member member = memberService.authenticate(request);
-        String token = tokenProvider.generateToken(
+
+        String token = jwtTokenProvider.generateToken(
                 member.getUsername(), member.getRoles());
 
-        Cookie cookie = cookieUtil.createCookie("X-AUTH-TOKEN"
-                , token);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("token", token);
 
-        response.addCookie(cookie);
+
+//        Cookie cookie = cookieUtil.createCookie("X-AUTH-TOKEN"
+//                , token);
+//
+//        response.addCookie(cookie);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                .build();
+                .body(map);
     }
 
     @PostMapping("/logout")

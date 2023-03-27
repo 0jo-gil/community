@@ -9,35 +9,31 @@ import com.example.community.member.exception.NotCorrectPassword;
 import com.example.community.member.model.MemberDto;
 import com.example.community.member.repository.MemberRepository;
 import com.example.community.member.service.MemberService;
-import com.example.community.member.utils.TokenProvider;
 import com.example.community.utils.CookieUtil;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class MemberServiceImpl implements MemberService {
-    private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
-
-    private final CookieUtil cookieUtil;
-
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     private final Logger logger = LoggerFactory.getLogger(CommunityApplication.class);
-
-    private final String COOKIE_NAME = "X-AUTH-TOKEN";
-
 
     @Override
     public Member register(MemberDto.SignUp parameter) {
@@ -69,6 +65,15 @@ public class MemberServiceImpl implements MemberService {
         if(!passwordEncoder.matches(member.getPassword(), user.getPassword())){
             throw new NotCorrectPassword();
         }
+
+        UsernamePasswordAuthenticationToken authenticationToken
+                = new UsernamePasswordAuthenticationToken(member.getUsername(), member.getPassword());
+
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+
+
         return user;
     }
 

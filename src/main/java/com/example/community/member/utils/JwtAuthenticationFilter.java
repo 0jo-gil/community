@@ -1,18 +1,15 @@
 package com.example.community.member.utils;
 
-import com.example.community.member.exception.TokenNotExistException;
-import com.example.community.utils.CookieUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,8 +19,8 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final TokenProvider tokenProvider;
-    private final CookieUtil cookieUtil;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @Override
     protected void doFilterInternal(
@@ -31,19 +28,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-        Cookie tokenCookie = cookieUtil.getCookie(request, "X-AUTH-TOKEN");
+       String tokenHeader = request.getHeader("Authorization");
 
-        if(tokenCookie != null){
-            String token = tokenCookie.getValue();
+       if(tokenHeader != null && tokenHeader.startsWith("Bearer ")){
+           String authToken = tokenHeader.substring(7);
+           String username = jwtTokenProvider.getUsername(authToken);
 
-            if(StringUtils.hasText(token) && tokenProvider.validateToken(token)){
-                Authentication authentication = tokenProvider.getAuthentication(token);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-            filterChain.doFilter(request, response);
-        } else {
-            filterChain.doFilter(request, response);
-        }
+           if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
+              Authentication authentication = jwtTokenProvider.getAuthentication(authToken);
 
+              SecurityContextHolder.getContext().setAuthentication(authentication);
+           }
+       }
+
+        filterChain.doFilter(request, response);
     }
 }
