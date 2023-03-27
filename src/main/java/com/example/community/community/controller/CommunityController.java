@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -17,11 +18,12 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
+@RequestMapping("/community")
 public class CommunityController extends BaseController{
     private final PostingService postingService;
     private final AuthenticationUtil authenticationUtil;
 
-    @GetMapping("/community/list")
+    @GetMapping("/list")
     @PreAuthorize("hasAnyRole('USER')")
     public String list(
             Model model,
@@ -42,7 +44,7 @@ public class CommunityController extends BaseController{
         return "/community/list";
     }
 
-    @GetMapping("/community/detail")
+    @GetMapping("/detail")
     public String detail(
             HttpServletRequest request,
             Model model,
@@ -51,17 +53,17 @@ public class CommunityController extends BaseController{
         long postNum = Long.parseLong(request.getParameter("id"));
 
         PostDto posting = postingService.detail(postNum);
-        boolean checkedUserPost = false;
+        boolean isUserChecked = false;
 
         boolean userChecked = authenticationUtil.isAuthenticated();
 
         if(principal != null){
             if(posting.getUserId().equals(principal.getName())){
-                checkedUserPost = true;
+                isUserChecked = true;
             }
         }
 
-        model.addAttribute("checkedUserPost", checkedUserPost);
+        model.addAttribute("isUserChecked", isUserChecked);
         model.addAttribute("posting", posting);
         model.addAttribute("userChecked", userChecked);
 
@@ -69,7 +71,7 @@ public class CommunityController extends BaseController{
         return "/community/detail";
     }
 
-    @GetMapping("/community/modify")
+    @GetMapping("/modify")
     public String modify(
         HttpServletRequest request,
         Model model
@@ -83,7 +85,7 @@ public class CommunityController extends BaseController{
         return "/community/write";
     }
 
-    @GetMapping("/community/write")
+    @GetMapping("/write")
     public String write(
             Model model
     ){

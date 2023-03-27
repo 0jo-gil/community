@@ -30,7 +30,7 @@
             </div>
 
             <div class="buttons-wrap">
-                <a th:if="${checkedUserPost}" th:href="'/community/modify?id=' + ${posting.postNum}">수정</a>
+                <a th:if="${isUserChecked}" th:href="'/community/modify?id=' + ${posting.postNum}">수정</a>
                 <a href="/community/list?pageIndex=1">목록</a>
             </div>
         </div>
