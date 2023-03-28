@@ -8,27 +8,46 @@
     <title>커뮤니티 - 리스트</title>
 
     <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/posting.css">
 </head>
 <body>
-    <div id="wrap">
-        <h1>커뮤니티 - 리스트</h1>
+    <div id="wrap" class="list-wrap">
+        <div th:replace="/fragments/layout.html" :: fragment-header(${userChecked})></div>
 
-        <div th:text="${postingList}"></div>
+        <div class="contents-wrap">
+            <h1 class="title">커뮤니티 - 리스트</h1>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>제목</th>
-                    <th>아이디</th>
-                    <th>작성일</th>
-                </tr>
-            </thead>
-            <tr th:each="item : ${postingList}">
-                <td th:text="${item.title}"></td>
-                <td th:text="${item.userId}"></td>
-                <td th:text="${item.createdAt}"></td>
-            </tr>
-        </table>
+            <div>
+                총 <span th:text="${listTotalCount}"></span>건
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th width="60%">제목</th>
+                        <th width="20%">아이디</th>
+                        <th width="20%">작성일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${postingList.size() < 1 || postingList == null}" class="row-empty">
+                        <td colspan="3">리스트가 존재하지 않습니다.</td>
+                    </tr>
+                    <tr th:each="item : ${postingList}">
+                        <td>
+                            <a th:href="'/community/detail?id=' + ${item.postNum}" th:text="${item.title}"></a>
+                        </td>
+                        <td th:text="${item.userId}"></td>
+                        <td th:text="${item.createdDateText}"></td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+            <a href="/community/write" class="write-btn">글쓰기</a>
+
+            <div th:utext="${pager}" class="pagination-wrap"></div>
+        </div>
     </div>
 
 </body>

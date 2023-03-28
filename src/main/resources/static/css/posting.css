@@ -1,6 +1,104 @@
 /* 글 작성하기 페이지 */
+.posting-wrap{
+    padding-top: 30px;
+}
 .posting-wrap #title{
     width: 100%;
     border: none;
     border-bottom: 1px solid #aaaa;
+    font-size: 18px;
+    padding: 10px 5px;
+    margin-bottom: 20px;
+}
+.posting-wrap #editor{
+    height: 600px;
+    font-size: 16px;
+}
+.posting-wrap .button-wrap{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.posting-wrap .button-wrap a,
+.posting-wrap .write-btn{
+    color: #111;
+    font-size: 14px;
+}
+
+/* 글목록 페이지 */
+
+.list-wrap table{
+    width: 100%;
+    border-collapse: collapse;
+}
+.list-wrap th{
+    padding: 10px 0;
+    border-bottom: 2px solid #000;
+}
+
+.list-wrap tbody tr{
+    border-bottom: 1px solid #efefef;
+}
+.list-wrap tbody tr.row-empty{
+    height: 300px;
+}
+
+.list-wrap tbody tr.row-empty td{
+    text-align: center;
+}
+
+.list-wrap td:not(:first-of-type){
+    text-align: center;
+    padding: 20px 10px;
+}
+
+.list-wrap td a{
+    display: block;
+    padding: 20px 20px;
+    color: #000;
+}
+
+.list-wrap .write-btn{
+    margin-top: 20px;
+    color: #111;
+    display: inline-block;
+}
+
+
+/* 게시글 상세 페이지 */
+.detail-wrap .content{
+    width: 100%;
+    border-top: 2px solid #000;
+}
+.detail-wrap .content-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 20px;
+}
+.detail-wrap .content-title{
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.detail-wrap .content-body{
+    border-top: 1px solid #efefef;
+    border-bottom: 1px solid #efefef;
+    padding: 60px 20px;
+}
+
+.detail-wrap .buttons-wrap{
+    text-align: center;
+    margin: 40px 0;
+}
+.detail-wrap .buttons-wrap a{
+    display: inline-block;
+    width: 140px;
+    height: 40px;
+    background: #000;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 40px;
 }

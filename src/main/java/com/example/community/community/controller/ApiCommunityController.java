@@ -2,28 +2,31 @@ package com.example.community.community.controller;
 
 import com.example.community.community.service.PostingService;
 import com.example.community.community.entity.Posting;
-import com.example.community.community.model.PostingInput;
+import com.example.community.community.model.PostingDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.security.Principal;
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @RestController
-public class ApiCommunityController {
+public class ApiCommunityController extends BaseController {
     private final PostingService postingService;
     @PostMapping("/api/community/write")
-    public ResponseEntity<?> list(
-            @RequestBody PostingInput parameter,
+    @PreAuthorize("hasAnyRole('USER')")
+    public ResponseEntity writeSubmit(
+            @RequestBody PostingDto parameter,
             Principal principal
-            ){
+    ){
+        HttpHeaders headers = new HttpHeaders();
+
         String userId = principal.getName();
-
-
         Posting posting = Posting.builder()
                 .title(parameter.getTitle())
                 .content(parameter.getContent())
@@ -37,14 +40,22 @@ public class ApiCommunityController {
 
         boolean result = postingService.register(posting);
 
-        System.out.println(result);
+        headers.setLocation(URI.create(
+                String.format("/community/detail?id=%s", posting.getPostNum())
+        ));
 
         if(!result) {
             return ResponseEntity.badRequest().body("글쓰기 실패");
         }
 
+        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+    }
 
-        return ResponseEntity.ok().body(result);
+    @PutMapping("/api/community/modify")
+    public ResponseEntity<?> modify(
+            @RequestBody PostingDto parameter
+    ) {
+        return ResponseEntity.ok().body("");
     }
 
 

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>커뮤니티 - 리스트</title>
+
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/posting.css">
+</head>
+<body>
+    <div id="wrap" class="detail-wrap">
+        <div th:replace="/fragments/layout.html" :: fragment-header(${userChecked})></div>
+
+        <div class="contents-wrap">
+            <h1 class="title">커뮤니티 - 상세페이지</h1>
+
+            <div class="content">
+                <div class="content-header">
+                    <div th:text="${posting.title}" class="content-title"></div>
+                    <div>
+                        <span th:text="${posting.userId}"></span> / <span th:text="${posting.createdDateText}"></span>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <div th:utext="${posting.content}"></div>
+                </div>
+            </div>
+
+            <div class="buttons-wrap">
+                <a th:if="${isUserChecked}" th:href="'/community/modify?id=' + ${posting.postNum}">수정</a>
+                <a href="/community/list?pageIndex=1">목록</a>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -11,23 +11,84 @@
 </head>
 <body>
     <div id="wrap">
+
         <div class="form-wrap">
             <form method="post" action="/member/login">
+                <h1>로그인</h1>
+
                 <div>
-                    <label for="userId">아이디</label>
-                    <input type="text" name="userId" id="userId" placeholder="아이디 입력"/>
+                    <label for="username">아이디</label>
+                    <input type="text" name="username" id="username" placeholder="아이디 입력" required/>
                 </div>
                 <div>
                     <label for="password">비밀번호</label>
-                    <input type="password" name="password" id="password" placeholder="비밀번호 입력"/>
+                    <input type="password" name="password" id="password" placeholder="비밀번호 입력" required/>
                 </div>
 
-                <a href="/">돌아가기</a>
-                <button type="submit">로그인</button>
+<!--                <p th:text="${exception}" class="exception-msg"></p>-->
+
+                <div class="button-wrap">
+                    <a href="/">돌아가기</a>
+                    <button type="submit">로그인</button>
+                </div>
             </form>
         </div>
 
     </div>
+
+<script>
+    const inputEl = document.querySelectorAll("input");
+    const submitBtnEl = document.querySelector("button[type=submit]");
+
+    let requestObj = {};
+
+    const API_CONFIG = {
+        LOGIN: {
+            METHOD: 'POST',
+            URL: '/api/member/login'
+        }
+    }
+
+    submitBtnEl.addEventListener("click", loginHandler);
+    async function loginHandler(e){
+        e.preventDefault();
+
+        const response = await fetch(
+            API_CONFIG.LOGIN.URL,
+            {
+                method: API_CONFIG.LOGIN.METHOD,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestObj)
+            }
+        )
+            .then((res) => {
+                if(res.status === 200){
+                    window.location.href = "/";
+                    console.log(res.headers.get("Authorization"));
+                }
+            })
+            .catch((err) => console.error(err));
+    }
+
+    inputEl.forEach(el => el.addEventListener('change', (e) => {
+        let name = e.target.name,
+            value = e.target.value;
+
+        onChangeHandler(name, value);
+    }))
+
+    function onChangeHandler(name, value){
+        requestObj = {
+            ...requestObj,
+            [name]: value
+        }
+
+        console.log(requestObj);
+    }
+
+</script>
 
 </body>
 </html>
