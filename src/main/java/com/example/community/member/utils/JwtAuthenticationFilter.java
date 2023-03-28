@@ -1,6 +1,5 @@
 package com.example.community.member.utils;
 
-import com.example.community.member.exception.TokenNotExistException;
 import com.example.community.utils.CookieUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,7 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final TokenProvider tokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
     private final CookieUtil cookieUtil;
 
     @Override
@@ -36,8 +35,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(tokenCookie != null){
             String token = tokenCookie.getValue();
 
-            if(StringUtils.hasText(token) && tokenProvider.validateToken(token)){
-                Authentication authentication = tokenProvider.getAuthentication(token);
+            if(StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)){
+                Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
             filterChain.doFilter(request, response);

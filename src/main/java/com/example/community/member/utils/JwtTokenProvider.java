@@ -14,16 +14,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.DatatypeConverter;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class TokenProvider {
+public class JwtTokenProvider {
     public static final String COOKIE_NAME = "X-AUTH-TOKEN";
     public static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60;
     private static final String KEY_ROLES = "roles";

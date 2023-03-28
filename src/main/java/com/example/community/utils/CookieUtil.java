@@ -1,9 +1,8 @@
 package com.example.community.utils;
 
 import com.example.community.member.exception.CookieNotExistException;
-import com.example.community.member.utils.TokenProvider;
+import com.example.community.member.utils.JwtTokenProvider;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +13,7 @@ public class CookieUtil {
         Cookie cookie = new Cookie(cookieName, value);
 
         cookie.setSecure(true);
-        cookie.setMaxAge((int) TokenProvider.TOKEN_EXPIRE_TIME);
+        cookie.setMaxAge((int) JwtTokenProvider.TOKEN_EXPIRE_TIME);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
 

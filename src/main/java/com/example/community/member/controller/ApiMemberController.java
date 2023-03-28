@@ -3,7 +3,7 @@ package com.example.community.member.controller;
 import com.example.community.member.entity.Member;
 import com.example.community.member.model.MemberDto;
 import com.example.community.member.service.MemberService;
-import com.example.community.member.utils.TokenProvider;
+import com.example.community.member.utils.JwtTokenProvider;
 import com.example.community.utils.CookieUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +23,7 @@ import java.net.URI;
 @RequestMapping("/api/member")
 public class ApiMemberController {
     private final MemberService memberService;
-    private final TokenProvider tokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
     private final CookieUtil cookieUtil;
 
 
@@ -47,7 +47,7 @@ public class ApiMemberController {
             HttpServletResponse response
     ){
         Member member = memberService.authenticate(request);
-        String token = tokenProvider.generateToken(
+        String token = jwtTokenProvider.generateToken(
                 member.getUsername(), member.getRoles());
 
         Cookie cookie = cookieUtil.createCookie("X-AUTH-TOKEN"
