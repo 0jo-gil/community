@@ -9,6 +9,6 @@ import javax.servlet.http.Cookie;
 
 public interface MemberService extends UserDetailsService {
     Member register(MemberDto.SignUp member);
-    Member authenticate(MemberDto.SignIn member);
+    String authenticate(MemberDto.SignIn member);
     boolean logout();
 }

@@ -9,7 +9,7 @@ import com.example.community.member.exception.NotCorrectPassword;
 import com.example.community.member.model.MemberDto;
 import com.example.community.member.repository.MemberRepository;
 import com.example.community.member.service.MemberService;
-import com.example.community.utils.CookieUtil;
+import com.example.community.member.utils.JwtTokenProvider;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -27,11 +27,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+//@RequiredArgsConstructor
 @AllArgsConstructor
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     private final Logger logger = LoggerFactory.getLogger(CommunityApplication.class);
 
@@ -58,7 +61,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member authenticate(MemberDto.SignIn member) {
+    public String authenticate(MemberDto.SignIn member) {
         Member user = memberRepository.findByUsername(member.getUsername())
                 .orElseThrow(() -> new MemberNotExistException());
 
@@ -69,12 +72,13 @@ public class MemberServiceImpl implements MemberService {
         UsernamePasswordAuthenticationToken authenticationToken
                 = new UsernamePasswordAuthenticationToken(member.getUsername(), member.getPassword());
 
-
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
+        String token = jwtTokenProvider.generateToken(authentication);
 
 
-        return user;
+
+        return token;
     }
 
     @Override

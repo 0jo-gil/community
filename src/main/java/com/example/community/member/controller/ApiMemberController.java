@@ -6,6 +6,8 @@ import com.example.community.member.service.MemberService;
 import com.example.community.member.utils.JwtTokenProvider;
 import com.example.community.utils.CookieUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +27,6 @@ import java.util.HashMap;
 @RequestMapping("/api/member")
 public class ApiMemberController {
     private final MemberService memberService;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final CookieUtil cookieUtil;
-
 
     @PostMapping("/register")
     public ResponseEntity<?> register(
@@ -50,10 +49,8 @@ public class ApiMemberController {
     ){
         System.out.println("로그인");
 
-        Member member = memberService.authenticate(request);
+        String token = memberService.authenticate(request);
 
-        String token = jwtTokenProvider.generateToken(
-                member.getUsername(), member.getRoles());
 
         HashMap<String, String> map = new HashMap<>();
         map.put("token", token);
@@ -75,8 +72,8 @@ public class ApiMemberController {
     ){
         boolean logoutResult = memberService.logout();
 
-        Cookie cookie = cookieUtil.createCookie("X-AUTH-TOKEN", null);
-        response.addCookie(cookie);
+//        Cookie cookie = cookieUtil.createCookie("X-AUTH-TOKEN", null);
+//        response.addCookie(cookie);
 
         return ResponseEntity.ok(logoutResult);
     }
